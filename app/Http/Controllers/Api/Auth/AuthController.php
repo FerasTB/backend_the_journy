@@ -62,12 +62,10 @@ class AuthController extends Controller
 
     public function register(RegisterRequest $request)
     {
-        $request->validated();
+        $fields = $request->validated();
+        $fields['password'] = Hash::make($request->password);
 
-        $user = User::create([
-            'phone' => $request->phone,
-            'password' => Hash::make($request->password),
-        ]);
+        $user = User::create($fields);
 
         $token = $user->createToken("the_journy_app")->plainTextToken;
 
