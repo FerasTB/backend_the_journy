@@ -15,15 +15,15 @@ return [
     |
     */
 
-    'paths' => ['api/*', 'sanctum/csrf-cookie'],
+    'paths' => ['api/*', 'sanctum/csrf-cookie'], // Ensure the correct API path is set
 
-    'allowed_methods' => ['GET, POST, PUT, DELETE, PATCH, OPTIONS'],
+    'allowed_methods' => ['*'], // Allow all methods (GET, POST, PUT, DELETE)
 
-    'allowed_origins' => ['http://localhost:3000', '*'],
+    'allowed_origins' => ['http://localhost:3000', '*'], // Replace with your Next.js origin (localhost or domain)
 
     'allowed_origins_patterns' => [],
 
-    'allowed_headers' => ['Content-Type, X-Auth-Token, Authorization, Origin'],
+    'allowed_headers' => ['*'], // Allow all headers
 
     'exposed_headers' => [],
 
