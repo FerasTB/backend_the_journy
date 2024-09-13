@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'], // Allow all methods (GET, POST, PUT, DELETE)
 
-    'allowed_origins' => ['http://localhost:3000', '*'], // Replace with your Next.js origin (localhost or domain)
+    'allowed_origins' => ['*'], // Replace with your Next.js origin (localhost or domain)
 
     'allowed_origins_patterns' => [],
 
