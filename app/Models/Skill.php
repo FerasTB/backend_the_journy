@@ -11,7 +11,6 @@ class Skill extends Model
 
     protected $fillable = ['user_id', 'skill_name'];
 
-    // علاقة مع المستخدم (User)
     public function user()
     {
         return $this->belongsTo(User::class);

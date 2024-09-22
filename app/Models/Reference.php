@@ -16,7 +16,6 @@ class Reference extends Model
         'ref_phone'
     ];
 
-    // علاقة مع المستخدم (User)
     public function user()
     {
         return $this->belongsTo(User::class);

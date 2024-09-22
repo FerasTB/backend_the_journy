@@ -25,14 +25,7 @@ class CVController extends Controller
         ]);
     }
 
-    // public function show(CV $cv)
-    // {
-    //     if ($cv->user_id !== Auth::id()) {
-    //         abort(403, 'Unauthorized action.');
-    //     }
 
-    //     return $cv;
-    // }
     public function show($id)
     {
         $cv = CV::findOrFail($id);
@@ -76,18 +69,14 @@ class CVController extends Controller
     }
     
 
-    public function generateCV()
+    public function get_CV()
     {
-        // جلب المستخدم المسجل للدخول
         $user = auth()->user();
 
-        // التأكد من وجود المستخدم
         if (!$user) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
-        //$cv = $user->cv;
 
-        // جلب جميع المعلومات المرتبطة بالمستخدم
         $cvData = [
             'personal_info' => [
                 'first_name' => $user->first_name,
@@ -136,7 +125,6 @@ class CVController extends Controller
             }) : []
         ];
 
-        // إرجاع البيانات في JSON
         return response()->json($cvData);
     }
 

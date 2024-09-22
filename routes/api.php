@@ -30,21 +30,21 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 
 
 Route::middleware('auth:sanctum')->group(function () {
-    // توجيهات للـ Summary
+    // Summary
     Route::get('/summaries', [SummaryController::class, 'index']);
     Route::post('/summaries', [SummaryController::class, 'store']);
     Route::get('/summaries/{id}', [SummaryController::class, 'show']);
     Route::put('/summaries/{id}', [SummaryController::class, 'update']);
     Route::delete('/summaries/{id}', [SummaryController::class, 'destroy']);
 
-    // توجيهات للـ Skills
+    // Skills
     Route::get('/skills', [SkillController::class, 'index']);
     Route::post('/skills', [SkillController::class, 'store']);
     Route::get('/skills/{id}', [SkillController::class, 'show']);
     Route::put('/skills/{id}', [SkillController::class, 'update']);
     Route::delete('/skills/{id}', [SkillController::class, 'destroy']);
 
-    // توجيهات لبقية الجداول بنفس النمط
+    // references
     Route::get('/references', [ReferenceController::class, 'index']);
     Route::post('/references', [ReferenceController::class, 'store']);
     Route::get('/references/{id}', [ReferenceController::class, 'show']);
@@ -92,6 +92,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/cv/{id}', [CVController::class, 'show']);
     Route::put('/cv/{id}', [CVController::class, 'update']);
     Route::delete('/cv/{id}', [CVController::class, 'destroy']);
-    Route::get('/cvs', [CVController::class, 'generateCV']);
+    Route::get('/cvs', [CVController::class, 'get_CV']);
 
 });

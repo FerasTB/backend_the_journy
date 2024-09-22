@@ -75,37 +75,31 @@ class User extends Authenticatable
         return $this->hasMany(Experience::class);
     }
 
-    // علاقة مع المهارات (Skills)
     public function skills()
     {
         return $this->hasMany(Skill::class);
     }
 
-    // علاقة مع المراجع (References)
     public function references()
     {
         return $this->hasMany(Reference::class);
     }
 
-    // علاقة مع الشهادات (Certificates)
     public function certificates()
     {
         return $this->hasMany(Certificate::class);
     }
 
-    // علاقة مع التعليم (Education)
     public function education()
     {
         return $this->hasMany(Education::class);
     }
 
-    // علاقة مع اللغات (Languages)
     public function languages()
     {
         return $this->hasMany(Language::class);
     }
 
-    // علاقة مع الملخصات (Summaries)
     public function summary()
     {
         return $this->hasOne(Summary::class);

@@ -10,7 +10,6 @@ class Responsibility extends Model
     use HasFactory;
     protected $fillable = ['exper_id', 'responsability_name'];
 
-    // علاقة مع الخبرات (Experience)
     public function experience()
     {
         return $this->belongsTo(Experience::class, 'exper_id');

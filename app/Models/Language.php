@@ -11,7 +11,6 @@ class Language extends Model
 
     protected $fillable = ['user_id', 'language_name'];
 
-    // علاقة مع المستخدم (User)
     public function user()
     {
         return $this->belongsTo(User::class);

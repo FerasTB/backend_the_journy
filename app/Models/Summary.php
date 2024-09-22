@@ -11,7 +11,6 @@ class Summary extends Model
 
     protected $fillable = ['user_id', 'summary'];
 
-    // علاقة مع المستخدم (User)
     public function user()
     {
         return $this->belongsTo(User::class);

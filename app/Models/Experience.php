@@ -18,13 +18,11 @@ class Experience extends Model
         'company_location'
     ];
 
-    // علاقة مع المستخدم (User)
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    // علاقة مع المسؤوليات (Responsibilities)
     public function responsibilities()
     {
         return $this->hasMany(Responsibility::class);
