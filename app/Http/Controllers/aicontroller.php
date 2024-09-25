@@ -44,7 +44,10 @@ class aicontroller extends Controller
                 'headers' => [
                     'Content-Type' => 'application/json',
                     'Accept' => 'application/json'
-                ]
+                ],
+                'curl' => [
+                    CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2,
+                ],
             ]);
 
             // Get the response body and decode it as JSON
