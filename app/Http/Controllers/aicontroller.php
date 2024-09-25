@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
@@ -28,25 +30,29 @@ class aicontroller extends Controller
                 "Return the response in JSON format."
         ];
 
-        // Make the API call (replace with your actual API URL)
-        $response = Http::withOptions([
-            'curl' => [
-                CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2, // Forces TLS 1.2
-            ]
-        ])->post('https://dockerjourney.flaamingo.com/llm-response', [
-            'message' => $prompt
+        // Initialize Guzzle Client
+        $client = new Client([
+            'base_uri' => 'https://dockerjourney.flaamingo.com', // Replace with your API base URL
+            'timeout'  => 10.0, // Set the request timeout
         ]);
 
-        // Check if the response is successful
-        if ($response->successful()) {
+        try {
+            // Send the request using Guzzle
+            $response = $client->post('/llm-response', [
+                'message' => $prompt,  // Send the prompt as JSON
+                'verify' => false,  // Disable SSL verification (not recommended for production)
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json'
+                ]
+            ]);
 
-            // Convert response to JSON
-            $json = $response->json();
+            // Get the response body and decode it as JSON
+            $json = json_decode($response->getBody()->getContents(), true);
 
             // Check if the JSON contains the keys 'experience' and 'note'
             if (isset($json['experience']) && isset($json['note'])) {
-
-                // Return the response from the API
+                // Return the processed response
                 return response()->json([
                     'success' => true,
                     'message' => 'Experience section processed successfully',
@@ -58,12 +64,12 @@ class aicontroller extends Controller
                     'message' => 'Required keys not found in the JSON response'
                 ], 400);
             }
-        } else {
-            // Handle unsuccessful response
+        } catch (RequestException $e) {
+            // Handle Guzzle request exception
             return response()->json([
                 'success' => false,
                 'message' => 'API request failed',
-                'error' => $response->body() // Log or return the error
+                'error' => $e->getMessage()
             ], 500);
         }
     }
