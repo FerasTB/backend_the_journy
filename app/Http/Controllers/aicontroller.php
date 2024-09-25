@@ -29,7 +29,11 @@ class aicontroller extends Controller
         ];
 
         // Make the API call (replace with your actual API URL)
-        $response = Http::post('https://dockerjourney.flaamingo.com/llm-response', [
+        $response = Http::withOptions([
+            'curl' => [
+                CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2, // Forces TLS 1.2
+            ]
+        ])->post('https://dockerjourney.flaamingo.com/llm-response', [
             'message' => $prompt
         ]);
 
