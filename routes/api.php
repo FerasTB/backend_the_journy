@@ -1,4 +1,6 @@
 <?php
+
+use App\Http\Controllers\aicontroller;
 use App\Http\Controllers\Api\SummaryController;
 use App\Http\Controllers\Api\SkillController;
 use App\Http\Controllers\Api\ReferenceController;
@@ -25,6 +27,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
+Route::post('/ai', [aicontroller::class, 'handleApiRequest']);
 Route::post('/reset-password', [AuthController::class, 'resetPassword'])->middleware('auth:sanctum');
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
@@ -50,7 +53,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/references/{id}', [ReferenceController::class, 'show']);
     Route::put('/references/{id}', [ReferenceController::class, 'update']);
     Route::delete('/references/{id}', [ReferenceController::class, 'destroy']);
-    
+
     // Certificates
     Route::get('/certificates', [CertificateController::class, 'index']);
     Route::post('/certificates', [CertificateController::class, 'store']);
@@ -93,5 +96,4 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/cv/{id}', [CVController::class, 'update']);
     Route::delete('/cv/{id}', [CVController::class, 'destroy']);
     Route::get('/cvs', [CVController::class, 'get_CV']);
-
 });
