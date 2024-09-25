@@ -16,18 +16,24 @@ class aicontroller extends Controller
 
         // Create the prompt for the API
         $prompt = [
-            'experience' => "Take the following text from the 'Experience' section of a CV and modify it to:\n\n" .
-                "Start each bullet point or sentence with an action verb.\n" .
-                "Ensure clear and concise wording without unnecessary details.\n" .
-                "Emphasize quantifiable achievements, metrics, or key results when possible.\n" .
-                "Use industry-relevant keywords to enhance ATS compatibility.\n" .
-                "Avoid passive voice or vague descriptions.\n" .
-                "Return the response as a JSON object with two keys:\n\n" .
-                "'experience': containing the adjusted experience section text.\n" .
-                "'note': mentioning any suggestions or feedback, such as missing metrics or improvements that could be made to strengthen the experience.\n\n" .
-                "Here’s the experience section text:\n\n" .
-                "\"$experienceText\"\n" .
-                "Return the response in JSON format."
+            'message' => <<<EOT
+Take the following text from the 'Experience' section of a CV and modify it to:
+
+Start each bullet point or sentence with an action verb.
+Ensure clear and concise wording without unnecessary details.
+Emphasize quantifiable achievements, metrics, or key results when possible.
+Use industry-relevant keywords to enhance ATS compatibility.
+Avoid passive voice or vague descriptions.
+Return the response as a JSON object with two keys:
+
+experience: containing the adjusted experience section text.
+
+Here is the experience section text:
+
+"$experienceText"
+
+Return the response in JSON format.
+EOT
         ];
 
         // Initialize Guzzle Client
@@ -40,31 +46,40 @@ class aicontroller extends Controller
             // Send the request using Guzzle
             $response = $client->post('/llm-response', [
                 'json' => $prompt,  // Send the prompt as JSON
-                'verify' => true,  // Disable SSL verification (not recommended for production)
+                'verify' => false,  // Disable SSL verification (not recommended for production)
                 'headers' => [
                     'Content-Type' => 'application/json',
                     'Accept' => 'application/json'
-                ],
-                'curl' => [
-                    CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2,
-                ],
+                ]
             ]);
 
             // Get the response body and decode it as JSON
             $json = json_decode($response->getBody()->getContents(), true);
-
-            // Check if the JSON contains the keys 'experience' and 'note'
-            if (isset($json['experience']) && isset($json['note'])) {
-                // Return the processed response
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Experience section processed successfully',
-                    'data' => $json
-                ]);
+            // return $json;
+            // Check if the response has 'llm_response' key
+            if (isset($json['llm_response'])) {
+                // return $json['llm_response'];
+                // The 'llm_response' is JSON but as a string, so decode it again
+                $decodedLlmResponse = json_decode($json['llm_response'], true);
+                // return $decodedLlmResponse;
+                // Check if the JSON contains the keys 'experience' and 'note'
+                if (isset($decodedLlmResponse['experience'])) {
+                    // Return the processed response
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Experience section processed successfully',
+                        'data' => $decodedLlmResponse
+                    ]);
+                } else {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Required keys not found in the decoded llm_response'
+                    ], 400);
+                }
             } else {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Required keys not found in the JSON response'
+                    'message' => 'llm_response key not found in the initial JSON response'
                 ], 400);
             }
         } catch (RequestException $e) {
