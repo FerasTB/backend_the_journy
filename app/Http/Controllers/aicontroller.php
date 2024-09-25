@@ -40,7 +40,7 @@ class aicontroller extends Controller
             // Send the request using Guzzle
             $response = $client->post('/llm-response', [
                 'json' => $prompt,  // Send the prompt as JSON
-                'verify' => false,  // Disable SSL verification (not recommended for production)
+                'verify' => true,  // Disable SSL verification (not recommended for production)
                 'headers' => [
                     'Content-Type' => 'application/json',
                     'Accept' => 'application/json'
