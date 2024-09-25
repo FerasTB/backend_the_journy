@@ -39,7 +39,7 @@ EOT
         // Initialize Guzzle Client
         $client = new Client([
             'base_uri' => 'https://dockerjourney.flaamingo.com', // Replace with your API base URL
-            'timeout'  => 10.0, // Set the request timeout
+            'timeout'  => 300, // Set the request timeout
         ]);
 
         try {
