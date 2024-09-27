@@ -27,7 +27,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
-Route::post('/ai', [aicontroller::class, 'handleApiRequest']);
+// Route::post('/ai', [aicontroller::class, 'handleApiRequest']);
 Route::post('/reset-password', [AuthController::class, 'resetPassword'])->middleware('auth:sanctum');
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
