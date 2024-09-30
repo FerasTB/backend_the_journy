@@ -8,7 +8,7 @@ use App\Http\Controllers\Api\EducationController;
 use App\Http\Controllers\Api\LanguageController;
 use App\Http\Controllers\Api\ExperienceController;
 use App\Http\Controllers\Api\ResponsibilityController;
-use App\Http\Controllers\Api\CVController;
+use App\Http\Controllers\Api\CvController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
