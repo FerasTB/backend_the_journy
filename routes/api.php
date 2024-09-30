@@ -90,11 +90,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/responsibilities/{id}', [ResponsibilityController::class, 'destroy']);
 
     // cvs
-    Route::get('/cv', [CVController::class, 'index']);
-    Route::post('/cv', [CVController::class, 'store']);
-    Route::get('/cv/{id}', [CVController::class, 'show']);
-    Route::put('/cv/{id}', [CVController::class, 'update']);
-    Route::delete('/cv/{id}', [CVController::class, 'destroy']);
-    Route::get('/cvs', [CVController::class, 'get_CV']);
-    Route::get('/test/cvs', [ResponsibilityController::class, 'get_CV']);
+    Route::get('/cv', [CvController::class, 'index']);
+    Route::post('/cv', [CvController::class, 'store']);
+    Route::get('/cv/{id}', [CvController::class, 'show']);
+    Route::put('/cv/{id}', [CvController::class, 'update']);
+    Route::delete('/cv/{id}', [CvController::class, 'destroy']);
+    Route::get('/cvs', [CvController::class, 'get_CV']);
 });
