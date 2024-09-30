@@ -37,6 +37,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/summaries', [SummaryController::class, 'index']);
     Route::post('/summaries', [SummaryController::class, 'store']);
     Route::get('/summaries/{id}', [SummaryController::class, 'show']);
+    Route::get('/summary', [SummaryController::class, 'indexForUser']);
     Route::put('/summaries/{id}', [SummaryController::class, 'update']);
     Route::delete('/summaries/{id}', [SummaryController::class, 'destroy']);
 

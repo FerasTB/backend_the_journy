@@ -17,6 +17,12 @@ class SummaryController extends Controller
         return SummaryResource::collection($summaries);
     }
 
+    public function indexForUser()
+    {
+        $user = auth()->user();
+        return new SummaryResource($user->summary);
+    }
+
     public function store(Request $request)
     {
         // Validate request
