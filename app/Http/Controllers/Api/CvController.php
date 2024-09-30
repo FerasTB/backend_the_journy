@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
@@ -29,45 +30,45 @@ class CVController extends Controller
     public function show($id)
     {
         $cv = CV::findOrFail($id);
-    
+
         if ($cv->user_id !== Auth::id()) {
             abort(403, 'Unauthorized action.');
         }
-    
+
         return response()->json($cv);
     }
-    
+
     public function update(Request $request, $id)
     {
         $cv = CV::findOrFail($id);
-    
+
         if ($cv->user_id !== Auth::id()) {
             abort(403, 'Unauthorized action.');
         }
-    
+
         $request->validate([
             'job_title' => 'required|string',
         ]);
-    
+
         $cv->update($request->all());
-    
+
         return response()->json($cv);
     }
-    
+
 
     public function destroy($id)
     {
         $cv = CV::findOrFail($id);
-    
+
         if ($cv->user_id !== Auth::id()) {
             abort(403, 'Unauthorized action.');
         }
-    
+
         $cv->delete();
-    
+
         return response(null, 204);
     }
-    
+
 
     public function get_CV()
     {
@@ -88,10 +89,10 @@ class CVController extends Controller
                 'website_url' => $user->website_url,
                 'linkedin_url' => $user->linkedin_url,
             ],
-            'job_title' => $user->cv ? $user->cv->job_title : null, 
+            'job_title' => $user->cv ? $user->cv->job_title : null,
             'summary' => $user->summary ? $user->summary->summary : null,
             'skills' => $user->skills ? $user->skills->pluck('skill_name') : [],
-            'education' => $user->education ? $user->education->map(function($edu) {
+            'education' => $user->education ? $user->education->map(function ($edu) {
                 return [
                     'university_name' => $edu->university_name,
                     'university_start_date' => $edu->university_start_date,
@@ -100,13 +101,13 @@ class CVController extends Controller
                     'specialization' => $edu->specialization,
                 ];
             }) : [],
-            'certificates' => $user->certificates ? $user->certificates->map(function($cert) {
+            'certificates' => $user->certificates ? $user->certificates->map(function ($cert) {
                 return [
                     'certificate_name' => $cert->certificate_name,
                     'certificate_date' => $cert->certificate_date,
                 ];
             }) : [],
-            'experiences' => $user->experiences ? $user->experiences->map(function($experience) {
+            'experiences' => $user->experiences ? $user->experiences->map(function ($experience) {
                 return [
                     'experience_name' => $experience->exper_name,
                     'company_name' => $experience->company_name,
@@ -116,7 +117,7 @@ class CVController extends Controller
                 ];
             }) : [],
             'languages' => $user->languages ? $user->languages->pluck('language_name') : [],
-            'references' => $user->references ? $user->references->map(function($ref) {
+            'references' => $user->references ? $user->references->map(function ($ref) {
                 return [
                     'first_name' => $ref->ref_first_name,
                     'last_name' => $ref->ref_last_name,
@@ -127,5 +128,4 @@ class CVController extends Controller
 
         return response()->json($cvData);
     }
-
 }

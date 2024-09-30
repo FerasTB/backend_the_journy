@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\aicontroller;
 use App\Http\Controllers\Api\SummaryController;
 use App\Http\Controllers\Api\SkillController;
 use App\Http\Controllers\Api\ReferenceController;
@@ -97,4 +96,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/cv/{id}', [CVController::class, 'update']);
     Route::delete('/cv/{id}', [CVController::class, 'destroy']);
     Route::get('/cvs', [CVController::class, 'get_CV']);
+    Route::get('/test/cvs', [ResponsibilityController::class, 'get_CV']);
 });
