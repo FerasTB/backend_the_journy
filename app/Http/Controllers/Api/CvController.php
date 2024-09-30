@@ -10,6 +10,7 @@ use App\Models\Experience;
 use App\Models\Language;
 use App\Models\Skill;
 use App\Models\Summary;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -160,12 +161,24 @@ class CVController extends Controller
             if ($request->has('Experience')) {
                 foreach ($request->input('Experience') as $experienceData) {
                     if (isset($experienceData['title']) && $experienceData['title'] !== 'not mentioned') {
+                        // Validate and format the start and end dates
+                        $startDate = $this->formatDate($experienceData['start_date']);
+                        $endDate = $this->formatDate($experienceData['end_date']);
+
+                        if (!$startDate) {
+                            return response()->json(['error' => 'Invalid start date format: ' . $experienceData['start_date']], 422);
+                        }
+
+                        if ($endDate === false && $experienceData['end_date'] !== 'not mentioned') {
+                            return response()->json(['error' => 'Invalid end date format: ' . $experienceData['end_date']], 422);
+                        }
+
                         Experience::create([
                             'user_id' => $user->id,
                             'exper_name' => $experienceData['title'],
                             'company_name' => $experienceData['company'],
-                            'exper_start_date' => $experienceData['start_date'],
-                            'exper_end_name' => $experienceData['end_date'],
+                            'exper_start_date' => $startDate,
+                            'exper_end_name' => $endDate,
                             'description' => $experienceData['description'] !== 'not mentioned' ? $experienceData['description'] : null,
                         ]);
                     }
@@ -176,11 +189,23 @@ class CVController extends Controller
             if ($request->has('Education')) {
                 foreach ($request->input('Education') as $educationData) {
                     if (isset($educationData['degree']) && $educationData['degree'] !== 'not mentioned') {
+                        // Validate and format the start and end dates
+                        $startDate = $this->formatDate($educationData['start_date']);
+                        $endDate = $this->formatDate($educationData['end_date']);
+
+                        if (!$startDate) {
+                            return response()->json(['error' => 'Invalid start date format: ' . $educationData['start_date']], 422);
+                        }
+
+                        if ($endDate === false && $educationData['end_date'] !== 'not mentioned') {
+                            return response()->json(['error' => 'Invalid end date format: ' . $educationData['end_date']], 422);
+                        }
+
                         Education::create([
                             'user_id' => $user->id,
                             'university_name' => $educationData['institution'],
-                            'university_start_date' => $educationData['start_date'],
-                            'university_end_date' => $educationData['end_date'],
+                            'university_start_date' => $startDate,
+                            'university_end_date' => $endDate,
                             'specialization' => $educationData['degree'],
                             'university_location' => $educationData['description'] !== 'not mentioned' ? $educationData['description'] : null,
                         ]);
@@ -234,5 +259,22 @@ class CVController extends Controller
                 'message' => $e->getMessage()
             ], 500);
         }
+    }
+
+    private function formatDate($date)
+    {
+        try {
+            // Check if the date is not 'not mentioned' and try to parse it
+            if ($date && $date !== 'not mentioned') {
+                // Try parsing the date using Carbon
+                return Carbon::parse($date)->toDateString(); // Convert to YYYY-MM-DD format
+            }
+        } catch (\Exception $e) {
+            // Return false if the date format is invalid
+            return false;
+        }
+
+        // Return null if the date is 'not mentioned'
+        return null;
     }
 }
