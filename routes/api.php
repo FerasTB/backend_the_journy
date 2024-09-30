@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\ExperienceController;
 use App\Http\Controllers\Api\ResponsibilityController;
 use App\Http\Controllers\Api\CvController;
 use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -32,6 +33,9 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 
 
 Route::middleware('auth:sanctum')->group(function () {
+
+    Route::put('/user/linkedin-url', [UserController::class, 'updateLinkedinUrl']);
+
     // Summary
     Route::get('/summaries', [SummaryController::class, 'index']);
     Route::post('/summaries', [SummaryController::class, 'store']);
@@ -43,6 +47,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Skills
     Route::get('/skills', [SkillController::class, 'index']);
     Route::post('/skills', [SkillController::class, 'store']);
+    Route::post('/array/skills', [SkillController::class, 'storeSkills']);
     Route::get('/skills/{id}', [SkillController::class, 'show']);
     Route::put('/skills/{id}', [SkillController::class, 'update']);
     Route::delete('/skills/{id}', [SkillController::class, 'destroy']);
@@ -71,6 +76,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Languages
     Route::get('/languages', [LanguageController::class, 'index']);
     Route::post('/languages', [LanguageController::class, 'store']);
+    Route::post('/array/languages', [LanguageController::class, 'storeLanguages']);
     Route::get('/languages/{id}', [LanguageController::class, 'show']);
     Route::put('/languages/{id}', [LanguageController::class, 'update']);
     Route::delete('/languages/{id}', [LanguageController::class, 'destroy']);
@@ -78,6 +84,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Experiences
     Route::get('/experiences', [ExperienceController::class, 'index']);
     Route::post('/experiences', [ExperienceController::class, 'store']);
+    Route::post('/experiences/responsibilities', [ExperienceController::class, 'storeExperienceWithResponsibilities']);
     Route::get('/experiences/{id}', [ExperienceController::class, 'show']);
     Route::put('/experiences/{id}', [ExperienceController::class, 'update']);
     Route::delete('/experiences/{id}', [ExperienceController::class, 'destroy']);
@@ -96,4 +103,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/cv/{id}', [CvController::class, 'update']);
     Route::delete('/cv/{id}', [CvController::class, 'destroy']);
     Route::get('/cvs', [CvController::class, 'get_CV']);
+    Route::post('/cvs', [CvController::class, 'storeCV']);
 });
