@@ -35,7 +35,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 Route::middleware('auth:sanctum')->group(function () {
 
     Route::put('/user/linkedin-url', [UserController::class, 'updateLinkedinUrl']);
-    Route::put('/user/personal-info', [CVController::class, 'updatePersonalInfo']);
+    Route::put('/user/personal-info', [UserController::class, 'updatePersonalInfo']);
 
     // Summary
     Route::get('/summaries', [SummaryController::class, 'index']);

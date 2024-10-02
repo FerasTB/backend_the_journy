@@ -41,10 +41,10 @@ class UserController extends Controller
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email,' . $user->id,
             'phone' => 'required|string|max:20',
-            // 'country' => 'required|string|max:100',
-            // 'city' => 'required|string|max:100',
-            // 'website_url' => 'nullable|url|max:255',
-            // 'linkedin_url' => 'nullable|url|max:255',
+            'country' => 'required|string|max:100',
+            'city' => 'required|string|max:100',
+            'website_url' => 'nullable|url|max:255',
+            'linkedin_url' => 'nullable|url|max:255',
         ]);
 
         // Update user's personal information
