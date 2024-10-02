@@ -19,10 +19,6 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
             //$table->string('phone');
-            $table->string('country')->nullable();
-            $table->string('city')->nullable();
-            $table->string('website_url')->nullable();
-            $table->string('linkedin_url')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->boolean('is_admin')->default(false);
             $table->boolean('is_paid')->default(false);
