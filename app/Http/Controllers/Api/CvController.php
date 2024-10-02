@@ -88,6 +88,7 @@ class CVController extends Controller
 
         $cvData = [
             'personal_info' => [
+                'id' => $user->id,
                 'first_name' => $user->first_name,
                 'last_name' => $user->last_name,
                 'email' => $user->email,
@@ -97,11 +98,23 @@ class CVController extends Controller
                 'website_url' => $user->website_url,
                 'linkedin_url' => $user->linkedin_url,
             ],
-            'job_title' => $user->cv ? $user->cv->job_title : null,
-            'summary' => $user->summary ? $user->summary->summary : null,
-            'skills' => $user->skills ? $user->skills->pluck('skill_name') : [],
+            'job_title' => $user->cv ? [
+                'id' => $user->cv->id,
+                'job_title' => $user->cv->job_title
+            ] : null,
+            'summary' => $user->summary ? [
+                'id' => $user->summary->id,
+                'summary' => $user->summary->summary
+            ] : null,
+            'skills' => $user->skills ? $user->skills->map(function ($skill) {
+                return [
+                    'id' => $skill->id,
+                    'skill_name' => $skill->skill_name,
+                ];
+            }) : [],
             'education' => $user->education ? $user->education->map(function ($edu) {
                 return [
+                    'id' => $edu->id,
                     'university_name' => $edu->university_name,
                     'university_start_date' => $edu->university_start_date,
                     'university_end_date' => $edu->university_end_date,
@@ -111,12 +124,14 @@ class CVController extends Controller
             }) : [],
             'certificates' => $user->certificates ? $user->certificates->map(function ($cert) {
                 return [
+                    'id' => $cert->id,
                     'certificate_name' => $cert->certificate_name,
                     'certificate_date' => $cert->certificate_date,
                 ];
             }) : [],
             'experiences' => $user->experiences ? $user->experiences->map(function ($experience) {
                 return [
+                    'id' => $experience->id,
                     'experience_name' => $experience->exper_name,
                     'company_name' => $experience->company_name,
                     'company_location' => $experience->company_location,
@@ -124,9 +139,15 @@ class CVController extends Controller
                     'end_date' => $experience->exper_end_date,
                 ];
             }) : [],
-            'languages' => $user->languages ? $user->languages->pluck('language_name') : [],
+            'languages' => $user->languages ? $user->languages->map(function ($language) {
+                return [
+                    'id' => $language->id,
+                    'language_name' => $language->language_name,
+                ];
+            }) : [],
             'references' => $user->references ? $user->references->map(function ($ref) {
                 return [
+                    'id' => $ref->id,
                     'first_name' => $ref->ref_first_name,
                     'last_name' => $ref->ref_last_name,
                     'phone' => $ref->ref_phone,
@@ -136,6 +157,7 @@ class CVController extends Controller
 
         return response()->json($cvData);
     }
+
 
     public function storeCV(Request $request)
     {
