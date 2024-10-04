@@ -90,8 +90,8 @@ class UserController extends Controller
                         ['user_id' => $user->id, 'section_name' => $section],
                         [
                             'original_section_text' => $data['original_section_text'],
-                            'notes' => json_encode($data['notes']), // Store as JSON
-                            'advice' => json_encode($data['advice']), // Store as JSON
+                            'notes' => $data['notes'], // Store as JSON
+                            'advice' => $data['advice'], // Store as JSON
                             'enhanced_section_text' => $data['enhanced_section_text'],
                             'score' => $data['score']
                         ]
