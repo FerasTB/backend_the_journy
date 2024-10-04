@@ -37,6 +37,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/user/linkedin-url', [UserController::class, 'updateLinkedinUrl']);
     Route::put('/user/personal-info', [UserController::class, 'updatePersonalInfo']);
     Route::post('/store-linkedin-analysis', [UserController::class, 'storeLinkedInAnalysis']);
+    Route::get('/linkedin-analysis', [UserController::class, 'getLinkedInAnalysis']);
 
     // Summary
     Route::get('/summaries', [SummaryController::class, 'index']);

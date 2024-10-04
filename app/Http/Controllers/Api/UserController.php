@@ -121,4 +121,49 @@ class UserController extends Controller
             ], 500);
         }
     }
+
+    public function getLinkedInAnalysis(Request $request)
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        try {
+            // Retrieve the overall analysis
+            $overallAnalysis = LinkedInAnalysis::where('user_id', $user->id)->first();
+
+            // Retrieve the section feedbacks
+            $sections = SectionFeedback::where('user_id', $user->id)->get();
+
+            // Prepare the response data
+            $responseData = [];
+
+            // Include each section's data
+            foreach ($sections as $section) {
+                $responseData[$section->section_name] = [
+                    'original_section_text' => $section->original_section_text,
+                    'notes' => $section->notes, // Will be automatically cast to array
+                    'advice' => $section->advice, // Will be automatically cast to array
+                    'enhanced_section_text' => $section->enhanced_section_text,
+                    'score' => $section->score,
+                ];
+            }
+
+            // Add the overall score
+            if ($overallAnalysis) {
+                $responseData['Overall Score'] = $overallAnalysis->overall_score;
+            } else {
+                $responseData['Overall Score'] = null;
+            }
+
+            return response()->json($responseData, 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Failed to retrieve LinkedIn analysis data',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
 }
