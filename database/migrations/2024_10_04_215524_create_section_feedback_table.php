@@ -16,8 +16,8 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('section_name');
             $table->text('original_section_text')->nullable();
-            $table->json('notes')->nullable(); // Store notes as JSON
-            $table->json('advice')->nullable(); // Store advice as JSON
+            $table->text('notes')->nullable(); // Store notes as JSON
+            $table->text('advice')->nullable(); // Store advice as JSON
             $table->text('enhanced_section_text')->nullable();
             $table->unsignedTinyInteger('score')->nullable();
             $table->timestamps();
