@@ -18,11 +18,13 @@ class SkillController extends Controller
     {
         $request->validate([
             'skill_name' => 'required|string',
+            'skill_name_ar' => 'nullable|string',
         ]);
 
         return Skill::create([
             'user_id' => Auth::id(),
             'skill_name' => $request->skill_name,
+            'skill_name_ar' => $request->skill_name_ar,
         ]);
     }
 
@@ -32,6 +34,7 @@ class SkillController extends Controller
         $request->validate([
             'skills' => 'required|array',
             'skills.*.skill_name' => 'required|string',
+            'skills.*.skill_name_ar' => 'nullable|string',
         ]);
 
         // Initialize an empty array to store created skills
@@ -42,6 +45,7 @@ class SkillController extends Controller
             $createdSkills[] = Skill::create([
                 'user_id' => Auth::id(),
                 'skill_name' => $skillData['skill_name'],
+                'skill_name_ar' => $skillData['skill_name_ar'],
             ]);
         }
 

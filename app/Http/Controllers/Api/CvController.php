@@ -110,6 +110,7 @@ class CVController extends Controller
                 return [
                     'id' => $skill->id,
                     'skill_name' => $skill->skill_name,
+                    'skill_name_ar' => $skill->skill_name_ar,
                 ];
             }) : [],
             'education' => $user->education ? $user->education->map(function ($edu) {
