@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\LinkedinAnalysis;
+use App\Models\SectionFeedback;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -60,5 +64,61 @@ class UserController extends Controller
         ]);
 
         return response()->json(['message' => 'Personal information updated successfully']);
+    }
+
+    public function storeLinkedInAnalysis(Request $request)
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        // Start a transaction to ensure all operations are successful
+        DB::beginTransaction();
+
+        try {
+            // Loop through each section
+            $sections = ['Name', 'Headline', 'Summary', 'Experience', 'Education', 'Skills', 'Certifications', 'Languages'];
+
+            foreach ($sections as $section) {
+                if ($request->has($section)) {
+                    $data = $request->input($section);
+
+                    // Save section data
+                    SectionFeedback::updateOrCreate(
+                        ['user_id' => $user->id, 'section_name' => $section],
+                        [
+                            'original_section_text' => $data['original_section_text'],
+                            'notes' => json_encode($data['notes']), // Store as JSON
+                            'advice' => json_encode($data['advice']), // Store as JSON
+                            'enhanced_section_text' => $data['enhanced_section_text'],
+                            'score' => $data['score']
+                        ]
+                    );
+                }
+            }
+
+            // Save the overall score
+            if ($request->has('Overall Score')) {
+                LinkedinAnalysis::updateOrCreate(
+                    ['user_id' => $user->id],
+                    ['overall_score' => $request->input('Overall Score')]
+                );
+            }
+
+            // Commit the transaction
+            DB::commit();
+
+            return response()->json(['message' => 'LinkedIn analysis data stored successfully.'], 201);
+        } catch (\Exception $e) {
+            // Rollback the transaction in case of any failure
+            DB::rollBack();
+
+            return response()->json([
+                'error' => 'Failed to store LinkedIn analysis data',
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 }
