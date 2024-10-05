@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\ResponsibilityController;
 use App\Http\Controllers\Api\CvController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\VerificationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -30,6 +31,7 @@ Route::post('/register', [AuthController::class, 'register']);
 // Route::post('/ai', [aicontroller::class, 'handleApiRequest']);
 Route::post('/reset-password', [AuthController::class, 'resetPassword'])->middleware('auth:sanctum');
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+Route::get('/verify-email/{code}', [VerificationController::class, 'verifyEmail']);
 
 
 Route::middleware('auth:sanctum')->group(function () {
