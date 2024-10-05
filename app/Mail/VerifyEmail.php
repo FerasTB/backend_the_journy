@@ -11,6 +11,8 @@ use Illuminate\Support\Arr;
 use MailerSend\Helpers\Builder\Personalization;
 use MailerSend\LaravelDriver\MailerSendTrait;
 use Carbon\Carbon;
+use Illuminate\Mail\Mailables\Address;
+
 
 class VerifyEmail extends Mailable
 {
@@ -32,6 +34,7 @@ class VerifyEmail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
+            from: new Address('no-reply@yourdomain.com', 'Your App Name'),
             subject: 'Email Verification',
         );
     }
