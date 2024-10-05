@@ -11,9 +11,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use App\Http\Resources\UserResource;
-use App\Mail\VerifyEmail;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -68,19 +65,9 @@ class AuthController extends Controller
         $fields = $request->validated();
         $fields['password'] = Hash::make($request->password);
 
-        // Create the user
         $user = User::create($fields);
 
-        // Generate verification code
-        $verificationCode = Str::random(40);
-        $user->verification_code = $verificationCode;
-        $user->save();
-
-        // Send verification email
-        Mail::to($user->email)->send(new VerifyEmail($user));
-
-        // Generate token
-        $token = $user->createToken("the_journey_app")->plainTextToken;
+        $token = $user->createToken("the_journy_app")->plainTextToken;
 
         $user->info()->create([
             'country' => 'Syria',
