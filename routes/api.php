@@ -32,16 +32,9 @@ Route::post('/register', [AuthController::class, 'register']);
 // Route::post('/ai', [aicontroller::class, 'handleApiRequest']);
 Route::post('/reset-password', [AuthController::class, 'resetPassword'])->middleware('auth:sanctum');
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
-Route::get('/verify-email/{code}', [VerificationController::class, 'verifyEmail']);
-Route::get('/test-email', function () {
-    Mail::raw('This is a test email.', function ($message) {
-        $message->to('recipient@example.com')
-            ->subject('Test Email from Laravel')
-            ->from('al2mohtrf@gmail.com', 'Your App Name');
-    });
+Route::post('/verify-email', [VerificationController::class, 'verifyEmail']);
+Route::post('/resend-verification-code', [VerificationController::class, 'resendVerificationCode']);
 
-    return 'Test email sent successfully!';
-});
 
 Route::middleware('auth:sanctum')->group(function () {
 

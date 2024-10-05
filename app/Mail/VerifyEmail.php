@@ -4,68 +4,28 @@ namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
-use Illuminate\Mail\Mailables\Content;
-use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Arr;
-use MailerSend\Helpers\Builder\Personalization;
-use MailerSend\LaravelDriver\MailerSendTrait;
-use Carbon\Carbon;
-use Illuminate\Mail\Mailables\Address;
 
-
-class VerifyEmail extends Mailable
+class EmailVerificationMail extends Mailable
 {
-    use Queueable, SerializesModels, MailerSendTrait;
+    use Queueable, SerializesModels;
 
     public $user;
+    public $verificationCode;
 
-    /**
-     * Create a new message instance.
-     */
-    public function __construct($user)
+    public function __construct($user, $verificationCode)
     {
         $this->user = $user;
+        $this->verificationCode = $verificationCode;
     }
 
-    /**
-     * Get the message envelope.
-     */
-    public function envelope(): Envelope
+    public function build()
     {
-        return new Envelope(
-            from: new Address('no-reply@yourdomain.com', 'Your App Name'),
-            subject: 'Email Verification',
-        );
-    }
-
-    /**
-     * Get the message content definition.
-     */
-    public function content(): Content
-    {
-        $to = Arr::get($this->to, '0.address');
-
-        // Use MailerSend API features
-        $this->mailersend(
-            template_id: null, // Replace with your MailerSend template ID if you have one
-            tags: ['email_verification'],
-            personalization: [
-                new Personalization($to, [
-                    'name' => $this->user->name,
-                    'verification_link' => url('/api/verify-email/' . $this->user->verification_code),
-                ])
-            ],
-            precedenceBulkHeader: true,
-            sendAt: Carbon::now(),
-        );
-
-        return new Content(
-            view: 'emails.verify_email',
-            with: [
+        return $this->subject('Email Verification Code')
+            ->view('emails.verify_email.blade')
+            ->with([
                 'user' => $this->user,
-                'verification_link' => url('/api/verify-email/' . $this->user->verification_code),
-            ],
-        );
+                'verificationCode' => $this->verificationCode,
+            ]);
     }
 }
