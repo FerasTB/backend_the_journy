@@ -37,7 +37,7 @@ Route::get('/test-email', function () {
     Mail::raw('This is a test email.', function ($message) {
         $message->to('recipient@example.com')
             ->subject('Test Email from Laravel')
-            ->from('your_gmail_address@gmail.com', 'Your App Name');
+            ->from('al2mohtrf@gmail.com', 'Your App Name');
     });
 
     return 'Test email sent successfully!';
