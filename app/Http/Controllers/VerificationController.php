@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\EmailVerificationMail;
+use App\Mail\VerifyEmail;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -49,7 +49,7 @@ class VerificationController extends Controller
         $user->save();
 
         // Resend verification code
-        Mail::to($user->email)->send(new EmailVerificationMail($user, $verificationCode));
+        Mail::to($user->email)->send(new VerifyEmail($user, $verificationCode));
 
         return response()->json(['message' => 'Verification code resent successfully.']);
     }

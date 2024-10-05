@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use App\Http\Resources\UserResource;
-use App\Mail\EmailVerificationMail;
+use App\Mail\VerifyEmail;
 use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
@@ -81,7 +81,7 @@ class AuthController extends Controller
         ]);
 
         // Send verification code to user's email
-        Mail::to($user->email)->send(new EmailVerificationMail($user, $verificationCode));
+        Mail::to($user->email)->send(new VerifyEmail($user, $verificationCode));
 
         return response()->json([
             'status' => 'alright',
