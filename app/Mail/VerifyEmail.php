@@ -22,7 +22,7 @@ class VerifyEmail extends Mailable
     public function build()
     {
         return $this->subject('Email Verification Code')
-            ->view('emails.verify_email.blade')
+            ->view('emails.verify_email')
             ->with([
                 'user' => $this->user,
                 'verificationCode' => $this->verificationCode,
