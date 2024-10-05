@@ -6,13 +6,10 @@
 </head>
 
 <body>
-    <p>Hello {{ $user->name }},</p>
-
-    <p>Please verify your email by clicking the link below:</p>
-
-    <p><a href="{{ $verification_link }}">Verify Email</a></p>
-
-    <p>Thanks,<br>Your App Team</p>
+    <p>Dear {{ $user->name }},</p>
+    <p>Your email verification code is: <strong>{{ $verificationCode }}</strong></p>
+    <p>Please enter this code in the app to verify your email address.</p>
+    <p>Thank you!</p>
 </body>
 
 </html>
