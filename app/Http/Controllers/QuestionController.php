@@ -16,7 +16,7 @@ class QuestionController extends Controller
      */
     public function index(Request $request)
     {
-        $user = $request->user();
+        $user = auth()->user();
 
         // Get all questions
         $questions = Question::all();
