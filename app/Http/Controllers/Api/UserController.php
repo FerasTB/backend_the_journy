@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\LinkedinAnalysis;
 use App\Models\SectionFeedback;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -165,5 +166,27 @@ class UserController extends Controller
                 'message' => $e->getMessage()
             ], 500);
         }
+    }
+
+    public function nextStep(User $user)
+    {
+
+        if (is_null($user->current_step)) {
+            $user->current_step = 1;
+        } elseif ($user->current_step < 5) {
+            $user->current_step++;
+        }
+
+        $user->save();
+
+        return response()->json(['message' => 'Current step updated successfully', 'current_step' => $user->current_step]);
+    }
+
+    public function paidDone(User $user)
+    {
+        $user->is_paid = true;
+        $user->save();
+
+        return response()->json(['message' => 'User is_paid updated successfully']);
     }
 }

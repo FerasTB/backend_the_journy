@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\Api\SummaryController;
 use App\Http\Controllers\Api\SkillController;
 use App\Http\Controllers\Api\ReferenceController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\Api\ResponsibilityController;
 use App\Http\Controllers\Api\CvController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\VerificationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -42,7 +44,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/user/personal-info', [UserController::class, 'updatePersonalInfo']);
     Route::post('/store-linkedin-analysis', [UserController::class, 'storeLinkedInAnalysis']);
     Route::get('/linkedin-analysis', [UserController::class, 'getLinkedInAnalysis']);
-
+    Route::post('/update-current-step/{user}', [UserController::class, 'nextStep']);
+    Route::post('/update-is-paid/{user}', [UserController::class, 'paidDone']);
     // Summary
     Route::get('/summaries', [SummaryController::class, 'index']);
     Route::post('/summaries', [SummaryController::class, 'store']);
@@ -111,4 +114,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/cv/{id}', [CvController::class, 'destroy']);
     Route::get('/cvs', [CvController::class, 'get_CV']);
     Route::post('/cvs', [CvController::class, 'storeCV']);
+
+
+    // question 
+    Route::post('/questions', [QuestionController::class, 'store']); // amal transfer under admin section
+    Route::get('/users/{user}/answers', [AnswerController::class, 'getUserAnswers']); // amal transfer under admin section
+
+    Route::get('/questions', [QuestionController::class, 'index']);
+    Route::get('/questions/{question}', [QuestionController::class, 'show']);
+    Route::post('/answers', [AnswerController::class, 'store']);
 });
