@@ -28,6 +28,8 @@ class QuestionController extends Controller
         $data = $questions->map(function ($question) use ($answeredQuestionIds) {
             return [
                 'id' => $question->id,
+                'text' => $question->text,
+                'video_path' => $question->video_path,
                 'answered' => in_array($question->id, $answeredQuestionIds),
             ];
         });
