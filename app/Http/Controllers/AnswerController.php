@@ -26,7 +26,7 @@ class AnswerController extends Controller
     {
         $request->validate([
             'question_id' => 'required|exists:questions,id',
-            'video_file' => 'required|file|mimes:mp4,mov,avi,wmv|max:204800', // Max 200MB
+            'video_file' => 'required|file|mimes:mp4,mov,avi,wmv,webm|max:204800', // Max 200MB
         ]);
 
         $userId = auth()->id();
