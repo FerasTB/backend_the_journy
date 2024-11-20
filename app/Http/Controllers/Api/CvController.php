@@ -138,6 +138,7 @@ class CVController extends Controller
                     'company_location' => $experience->company_location,
                     'start_date' => $experience->exper_start_date,
                     'end_date' => $experience->exper_end_date,
+                    'description' => $experience->description,
                 ];
             }) : [],
             'languages' => $user->languages ? $user->languages->map(function ($language) {
