@@ -320,7 +320,7 @@ class CVController extends Controller
         }
 
         if ($dateTime) {
-            return $dateTime->format('Y-m-d');
+            return Carbon::parse($dateTime->format('Y-m-d'))->toDateString();
         } else {
             return false;
         }
