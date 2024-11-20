@@ -189,7 +189,7 @@ class CVController extends Controller
                         $startDate = $this->formatDate($experienceData['start_date']);
                         $endDate = $this->formatDate($experienceData['end_date']);
 
-                        if (!$startDate) {
+                        if ($startDate === false) {
                             return response()->json(['error' => 'Invalid start date format: ' . $experienceData['start_date']], 422);
                         }
 
@@ -202,7 +202,7 @@ class CVController extends Controller
                             'exper_name' => $experienceData['title'],
                             'company_name' => $experienceData['company'],
                             'exper_start_date' => $startDate,
-                            'exper_end_name' => $endDate,
+                            'exper_end_date' => $endDate,
                             'description' => $experienceData['description'] !== 'not mentioned' ? $experienceData['description'] : null,
                         ]);
                     }
@@ -217,7 +217,7 @@ class CVController extends Controller
                         $startDate = $this->formatDate($educationData['start_date']);
                         $endDate = $this->formatDate($educationData['end_date']);
 
-                        if (!$startDate) {
+                        if ($startDate === false) {
                             return response()->json(['error' => 'Invalid start date format: ' . $educationData['start_date']], 422);
                         }
 
@@ -250,12 +250,24 @@ class CVController extends Controller
             // Handle Certifications if provided
             if ($request->has('Certifications') && $request->input('Certifications') !== 'not mentioned') {
                 foreach ($request->input('Certifications') as $certification) {
+                    // Validate and format the date fields
+                    $issueDate = isset($certification['issue_date']) ? $this->formatDate($certification['issue_date']) : null;
+                    $expirationDate = isset($certification['expiration_date']) ? $this->formatDate($certification['expiration_date']) : null;
+
+                    if ($issueDate === false && $certification['issue_date'] !== 'not mentioned') {
+                        return response()->json(['error' => 'Invalid issue date format: ' . $certification['issue_date']], 422);
+                    }
+
+                    if ($expirationDate === false && $certification['expiration_date'] !== 'not mentioned') {
+                        return response()->json(['error' => 'Invalid expiration date format: ' . $certification['expiration_date']], 422);
+                    }
+
                     Certificate::create([
                         'user_id' => $user->id,
                         'certificate_name' => $certification['name'],
                         'issuing_organization' => $certification['issuing_organization'] ?? null,
-                        'certificate_date' => $certification['issue_date'] ?? null,
-                        'expiration_date' => $certification['expiration_date'] ?? null,
+                        'certificate_date' => $issueDate,
+                        'expiration_date' => $expirationDate,
                     ]);
                 }
             }
@@ -284,6 +296,36 @@ class CVController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * Format a date string from 'DD-MM-YYYY' or 'DD/MM/YYYY' to 'YYYY-MM-DD'.
+     * Returns null if the input is empty or 'not mentioned'.
+     * Returns false if the date format is invalid.
+     *
+     * @param string|null $date
+     * @return string|null|false
+     */
+    private function formatDate($date)
+    {
+        if (!$date || strtolower($date) == 'not mentioned') {
+            return null;
+        }
+
+        // Try to create a DateTime object from the given date format
+        $dateTime = \DateTime::createFromFormat('d-m-Y', $date);
+
+        if (!$dateTime) {
+            // Try with 'd/m/Y' format
+            $dateTime = \DateTime::createFromFormat('d/m/Y', $date);
+        }
+
+        if ($dateTime) {
+            return $dateTime->format('Y-m-d');
+        } else {
+            return false;
+        }
+    }
+
 
     private function formatDate($date)
     {
