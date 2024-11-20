@@ -307,22 +307,18 @@ class CVController extends Controller
      */
     private function formatDate($date)
     {
-        if (!$date || strtolower($date) == 'not mentioned') {
-            return null;
-        }
-
-        // Try to create a DateTime object from the given date format
-        $dateTime = \DateTime::createFromFormat('d-m-Y', $date);
-
-        if (!$dateTime) {
-            // Try with 'd/m/Y' format
-            $dateTime = \DateTime::createFromFormat('d/m/Y', $date);
-        }
-
-        if ($dateTime) {
-            return Carbon::parse($dateTime->format('Y-m-d'))->toDateString();
-        } else {
+        try {
+            // Check if the date is not 'not mentioned' and try to parse it
+            if ($date && $date !== 'not mentioned') {
+                // Try parsing the date using Carbon
+                return Carbon::parse($date)->toDateString(); // Convert to YYYY-MM-DD format
+            }
+        } catch (\Exception $e) {
+            // Return false if the date format is invalid
             return false;
         }
+
+        // Return null if the date is 'not mentioned' or empty
+        return null;
     }
 }
