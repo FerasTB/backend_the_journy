@@ -24,6 +24,7 @@ class ExperienceController extends Controller
             'exper_end_name' => 'nullable|date',
             'company_name' => 'required|string',
             'company_location' => 'required|string',
+            'description' => 'nullable|string',
         ]);
 
         return Experience::create([
@@ -33,6 +34,7 @@ class ExperienceController extends Controller
             'exper_end_name' => $request->exper_end_name,
             'company_name' => $request->company_name,
             'company_location' => $request->company_location,
+            'description' => $request->description,
         ]);
     }
     public function show($id)
@@ -60,6 +62,7 @@ class ExperienceController extends Controller
             'exper_end_date' => 'nullable|date',
             'company_name' => 'required|string',
             'company_location' => 'required|string',
+            'description' => 'nullable|string',
         ]);
 
         $experience->update($request->all());
