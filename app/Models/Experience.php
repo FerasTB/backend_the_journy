@@ -10,12 +10,13 @@ class Experience extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 
-        'exper_name', 
-        'exper_start_date', 
-        'exper_end_date', 
-        'company_name', 
-        'company_location'
+        'user_id',
+        'exper_name',
+        'exper_start_date',
+        'exper_end_date',
+        'company_name',
+        'company_location',
+        'description'
     ];
 
     public function user()
