@@ -325,22 +325,4 @@ class CVController extends Controller
             return false;
         }
     }
-
-
-    private function formatDate($date)
-    {
-        try {
-            // Check if the date is not 'not mentioned' and try to parse it
-            if ($date && $date !== 'not mentioned') {
-                // Try parsing the date using Carbon
-                return Carbon::parse($date)->toDateString(); // Convert to YYYY-MM-DD format
-            }
-        } catch (\Exception $e) {
-            // Return false if the date format is invalid
-            return false;
-        }
-
-        // Return null if the date is 'not mentioned'
-        return null;
-    }
 }
